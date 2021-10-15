@@ -12,6 +12,8 @@
 # Happy Coding!
 
 service: rest-api
+plugins: 
+  - serverless-offline
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -24,10 +26,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
-
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  stage: dev
+  region: us-west-2
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -50,16 +50,26 @@ provider:
 #    variable1: value1
 
 # you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
+package:
+ patterns:
+  #  - '!exclude-me.js'
+  #  - '!exclude-me-dir/**'
+   - feature/**
+   - model/**
 
 functions:
-  hello:
-    handler: handler.hello
+  getTodo:
+    handler: feature/read.readTodos
+    events:
+      - http:
+          path: /todo
+          method: get
+  createTodo:
+    handler: feature/create.createTodo
+    events:
+      - http:
+          path: /todo
+          method: post
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
